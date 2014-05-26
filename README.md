@@ -13,8 +13,10 @@ TagSharp constructs tests by parsing rules from character strings and constructi
 
 
 
-Example Validation Tests
-------------------------
+Examples
+--------
+
+Here are a few example validation rules to show what can be done:
 
 
 A test to assert that the web page contains an &lt;h1&gt; heading:
@@ -50,8 +52,8 @@ Error visualisation can dramatically improve the usability of a validation tool.
 Todo ...
 
 
-Validation Rule Documentation
-=============================
+DSL Documentation
+=================
 
 A validation rule is formed of three parts:
 
@@ -128,7 +130,7 @@ The selector part of this DSL for the most part wraps the CSS selector functiona
 Further Reading
 ---------------
 
-Before working on this proejct I found reading these books extremely helpful. Debasish Gosh in particular is very passionate about the subject and will fill you with enthusiasm for the task ahead!
+Before working on this proejct I found reading these books extremely helpful. [Debasish Gosh](http://debasishg.blogspot.co.uk/) in particular is very passionate about the subject and will fill you with enthusiasm for the task ahead!
 
-* *Debasish Gosh, DSLs in Action, Manning Publications Co., 2011* - Gosh explains in great detail the difference between internal and external DSLs providing many examples in Scala, Groovy and Clojure.
+* *Debasish Gosh, DSLs in Action, Manning Publications Co., 2011* - explains in great detail the difference between internal and external DSLs providing many examples in Scala, Groovy and Clojure.
 * *Odersky et al, Programming in Scala (2nd Edition), Artima Press, 2010* - see the chapter on how to use the Parser Combinator library.
