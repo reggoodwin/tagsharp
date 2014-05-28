@@ -31,16 +31,14 @@ object ErrorHighlightingExample extends App {
         <title>Page Title</title>
       </head>
       <body>
-        <div>
-          <p>The web page should not contain <u>underlined text</u> yet it does.</p>
-          <p>Image elements like <img src="image.png" /> should contain an alt attribute.</p>
-          <p>The organisation 'Smart organisation' has the wrong capitalisation.</p>
-        </div>
+        <p>The web page should not contain <u>underlined text</u> yet it does.</p>
+        <p>Image elements like <img src="image.png" /> should contain an alt attribute.</p>
+        <p>The organisation 'Smart organisation' has the wrong capitalisation.</p>
       </body>
     </html>
     """
 
-  // Parse a Jsoup document for testing
+  // Parse the HTML with Jsoup
 
   val doc: Document = Jsoup.parse(html)
   
@@ -66,11 +64,11 @@ object ErrorHighlightingExample extends App {
 
   val testRunner = new TestRunner(doc, suite)
 
-  // Run the tests and return results
+  // Run the test suite and get the results
 
   val results: Results = testRunner.testResults
 
-  // Apply highlighting to the mutable Jsoup HTML document
+  // Apply highlighting to the Jsoup document to show the errors
 
   val highlighter = new PageErrorHighlighter
   highlighter.highlight(doc, results.failures)

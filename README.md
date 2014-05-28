@@ -47,15 +47,57 @@ A test to ensure font sizes are expressed using relative not absolute units:
 Error Visualisation
 -------------------
 
-Error visualisation can dramatically improve the usability of a validation tool. Highlighting can optionally be applied to the Jsoup Document after test(s) have been run. Applying highlighting actually changes the document structure so that is why it is done last.
-
-Todo ...
+Highlighting can optionally be applied to the Jsoup document after test(s) have been run to help visualise where the errors occurred.
+Applying highlighting actually changes the structure of the Document so it should be done after all tests have completed.
 
 
 Code
 ----
 
-Todo ...
+Here is an example of how this works. Run this with 'sbt run'.
+The full code example is in *org.tagsharp.examples.ErrorHighlightingExample*.
+
+
+    val html = """
+    <!doctype html>
+    <html>
+      <head>
+        <title>Page Title</title>
+      </head>
+      <body>
+        <p>Image elements like <img src="image.png" /> should contain an alt attribute.</p>
+      </body>
+    </html>"""
+
+    // Parse the HTML with Jsoup
+
+    val doc: Document = Jsoup.parse(html)
+  
+    // Construct a simple checkpoint suite with just one test
+
+    val suite = new CheckpointSuite(List(
+        Checkpoint(
+            name = "Image elements should contain an 'alt' attribute",
+            test = new ValidationTest("[alt] in <img> should occur"),
+            id = "mock-id"
+        )
+    ))
+
+    val testRunner = new TestRunner(doc, suite)
+
+    // Run the test suite and get the results
+
+    val results: Results = testRunner.testResults
+
+    // Apply highlighting to the Jsoup document to show the errors
+
+    val highlighter = new PageErrorHighlighter
+    highlighter.highlight(doc, results.failures)
+
+    // Print out the modified HTML. 
+    // (save this to file and open in browser to see highlighting)
+
+    println(doc.html())
 
 
 DSL Documentation
@@ -119,11 +161,6 @@ A *comment* can prepend the expression and is ignored by the expression evaluato
 
     /* This part of the expression is ignored */ <title> should occur at least once
 
-
-Todo
-----
-
-A REPL would make this library easier to get up and running with.
 
 
 About the Implementation
