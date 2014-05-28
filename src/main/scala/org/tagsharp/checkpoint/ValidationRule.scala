@@ -14,14 +14,14 @@ import org.tagsharp.test.{Fail, Pass, Result}
  * A Test whose terms are expressed in the '{selector} should {predicate}'
  * format and pre-compiled by the RuleParser.
  */
-class ShouldTest(terms: String) extends Test {
+class ValidationTest(terms: String) extends Test {
 
   val parser = new RuleParser()
   val parseResult = parser.parseRule(terms)
   require(!parseResult.isEmpty, "Rule did not parse [" + parseResult + "]")
   val rule = parseResult.get
 
-  override def test(element: Element): Result = {
+  override def apply(element: Element): Result = {
     val mr:MatchResult = rule.eval(element)
 
     mr match {
@@ -38,4 +38,5 @@ class ShouldTest(terms: String) extends Test {
   }
 
   override def toString = getClass.getSimpleName + "(" + terms + ")"
+
 }

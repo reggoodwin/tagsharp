@@ -5,7 +5,7 @@ import org.jsoup.nodes.Element
 
 abstract class Test() {
 
-  def test(element: Element): Result
+  def apply(element: Element): Result
 
   override def toString = this.getClass.getSimpleName
 

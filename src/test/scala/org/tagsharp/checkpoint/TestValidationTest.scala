@@ -7,9 +7,9 @@ import org.jsoup.nodes.Document
 import org.tagsharp.test.{Fail, Pass}
 
 
-class TestShouldTest extends FlatSpec with ShouldMatchers {
+class TestValidationTest extends FlatSpec with ShouldMatchers {
 
-  behavior of "ShouldTest"
+  behavior of "ValidationTest"
 
 
   val doc1 = Jsoup.parse(
@@ -137,15 +137,15 @@ class TestShouldTest extends FlatSpec with ShouldMatchers {
 
 
   def shouldPass(doc: Document, terms: String) = {
-    val test = new ShouldTest(terms)
-    test.test(doc) match {
+    val test = new ValidationTest(terms)
+    test.apply(doc) match {
       case Pass() =>
       case f: Fail => fail("Should have passed: " + f)
     }
   }
   def shouldFail(doc: Document, terms: String) = {
-    val test = new ShouldTest(terms)
-    val result = test.test(doc)
+    val test = new ValidationTest(terms)
+    val result = test.apply(doc)
     result match {
       case Pass() => fail("Should have flop: " + result + ", rule: " + test.rule)
       case _ =>

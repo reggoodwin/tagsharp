@@ -81,14 +81,12 @@ class ErrorTagger(wrappingTag: String = SpanWrapper, wrapElements: Boolean = fal
 
     // 2. Group TextSpan with same TextNode, so all tags applied together
     val grouped: Map[TextNode, List[(Checkpoint, TextSpan)]] = extracted.groupBy(t => t._2.node)
-    //val flat:List[(TextNode, List[(Checkpoint, TextSpan)])] = grouped.map{ case (key, value) => (key, value) }.toList
 
     // 3. Check and merge match conflicts on same TextNode
     grouped foreach { p => {
         val textNode = p._1
         val pairConverts = p._2 map (m => (m._1, Span(m._2.start, m._2.end)))
         val pairsMerged: MergedPairs = mergedPairs(pairConverts)
-
         // 4. Apply tags to TextNode
         applyTextNodeTags(textNode, pairsMerged)
       }

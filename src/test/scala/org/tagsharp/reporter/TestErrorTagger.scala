@@ -8,7 +8,7 @@ import org.tagsharp.util.TestingUtil._
 import org.tagsharp.test.{TextError, Test, ElementError}
 import org.tagsharp.util.Span
 import org.tagsharp.jsoup.TextSpan
-import org.tagsharp.checkpoint.{Highlightable, Checkpoint}
+import org.tagsharp.checkpoint.Checkpoint
 
 
 class TestErrorTagger extends FlatSpec with ShouldMatchers {
@@ -33,7 +33,7 @@ class TestErrorTagger extends FlatSpec with ShouldMatchers {
 
     val doc = Jsoup.parse(html)
 
-    val checkpoint = Checkpoint("1234", "Mock", mockTest("Mock"), Highlightable.Both)
+    val checkpoint = Checkpoint("1234", "Mock", mockTest("Mock"))
   }
 
   it should "add tag attrMatch to h1" in new TagElementFixture {
@@ -127,8 +127,8 @@ class TestErrorTagger extends FlatSpec with ShouldMatchers {
     // s3                     [10 ... 14]
     // s4                               [15 ... 20]
 
-    val checkpoint1 = Checkpoint("1234", "Mock1", mockTest("Test1"), Highlightable.Both)
-    val checkpoint2 = Checkpoint("4321", "Mock2", mockTest("Test2"), Highlightable.Both)
+    val checkpoint1 = Checkpoint("1234", "Mock1", mockTest("Test1"))
+    val checkpoint2 = Checkpoint("4321", "Mock2", mockTest("Test2"))
 
     val s0 = Span(0, 4)
     val s1 = Span(5, 10)
@@ -197,7 +197,7 @@ class TestErrorTagger extends FlatSpec with ShouldMatchers {
     val p1 = doc.getElementById("p1")
     val p2 = doc.getElementById("p2")
 
-    val checkpoint1 = Checkpoint("1234", "Mock1", mockTest("Test1"), Highlightable.Both)
+    val checkpoint1 = Checkpoint("1234", "Mock1", mockTest("Test1"))
     val tagger = new ErrorTagger
   }
 
@@ -285,7 +285,7 @@ class TestErrorTagger extends FlatSpec with ShouldMatchers {
     val h1 = doc.getElementById("h1")
     val p = doc.getElementById("p1")
     val strong = doc.getElementById("s")
-    val checkpoint1 = Checkpoint("1234", "Mock1", mockTest("Test1"), Highlightable.Both)
+    val checkpoint1 = Checkpoint("1234", "Mock1", mockTest("Test1"))
     val tagger = new ErrorTagger
   }
 

@@ -193,6 +193,9 @@ object RuleParsers {
       case s~"should"~t => new Rule(s, t)
     }
 
+    // If needing to explicitly type the ParseResult then need to import with:
+    // import parser.{Success, Failure, Error}
+
     def parseRule(source: String):ParseResult[Rule] = parseAll(rule, source)
   }
 

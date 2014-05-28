@@ -8,9 +8,9 @@ import org.tagsharp.checkpoint.BasicCheckpointSuite
 import org.jsoup.Jsoup
 
 
-class TestTextErrorReporter extends FlatSpec with ShouldMatchers {
+class TestTextErrorHighlighter extends FlatSpec with ShouldMatchers {
 
-  behavior of "TextErrorReporter"
+  behavior of "TextErrorHighlighter"
 
   trait BadHtml {
     
@@ -35,9 +35,9 @@ class TestTextErrorReporter extends FlatSpec with ShouldMatchers {
     val checkpointSuite = BasicCheckpointSuite.defaultSuite()
     val doc = Jsoup.parse(html)
     val runner = new TestRunner(doc, checkpointSuite)
-    val results = runner.resultsOfTests
-    val reporter = new TextErrorReporter()
-    val report = reporter.createReport(results)
+    val results = runner.testResults
+    val highlighter = new TextErrorHighlighter()
+    val report = highlighter.highlight(results)
   }
 
 }

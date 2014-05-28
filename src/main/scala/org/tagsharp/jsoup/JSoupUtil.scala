@@ -65,16 +65,12 @@ object JSoupUtil {
   }
 
   /**
-   * Adds or appends a style attrMatch to the given Node.
+   * Adds or appends a class attribute to the given node
    */
-  def updateStyle(node: Node, extraStyle: String) {
-
-    def merge(s:String, s2:String) =
-      if (s isEmpty) s2
-      else s + (if (s endsWith ";") "" else "; ") + s2
-
-    val style = node.attr("style").trim
-    node.attr("style", merge(style, extraStyle))
+  def appendClass(node: Node, extraClass: String) {
+    def merge(s:String, s2:String) = if (s isEmpty) s2 else s + " " + s2
+    val classStyle = node.attr("class").trim
+    node.attr("class", merge(classStyle, extraClass))
   }
 
 }

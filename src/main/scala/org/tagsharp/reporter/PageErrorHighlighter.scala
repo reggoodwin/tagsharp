@@ -3,17 +3,18 @@ package org.tagsharp.reporter
 import scala.collection.JavaConverters._
 import org.jsoup.nodes.{Document,Element}
 import org.tagsharp.checkpoint.Checkpoint
-import org.tagsharp.jsoup.JSoupUtil.{appendAttribute, selectElements, updateStyle}
+import org.tagsharp.jsoup.JSoupUtil.{appendAttribute, appendClass, selectElements}
 import org.tagsharp.reporter.ErrorTagger.{ErrorAttribute, SpanWrapper, TitleAttribute}
-import org.tagsharp.reporter.PageHighlightReporter.appendTitleAttributeMessage
-import org.tagsharp.reporter.PageHighlightReporter.HighlightCssRule
+import org.tagsharp.reporter.PageErrorHighlighter.appendTitleAttributeMessage
 import org.tagsharp.test.Result
 
 /**
- * An error Reporter that reports on errors by highlighting
- * them in the original HTML document.
+ * An error highlighter that converts errors in failed Result into markup
+ * changes in the original Jsoup HTML document that will flag them up.
  */
-class PageHighlightReporter {
+class PageErrorHighlighter {
+
+  import PageErrorHighlighter._
 
   /**
    * For each error:
@@ -23,13 +24,13 @@ class PageHighlightReporter {
    *     <li>attributes from children to them overriding our message
    * </ul>
    */
-  def create(document: Document, results: List[(Checkpoint, Result)]) {
+  def highlight(document: Document, results: List[(Checkpoint, Result)]):Unit = {
 
     new ErrorTagger(SpanWrapper).tagErrors(results)
 
     val elements = selectElements(document,"[" + ErrorAttribute + "]")
     elements.foreach(e => {
-      updateStyle(e, HighlightCssRule)
+      appendClass(e, HighlightCssClass)
     })
 
     val checkpoints = results.map(_._1)
@@ -41,19 +42,26 @@ class PageHighlightReporter {
         document.head.prepend(s"<base href='$baseUri'></base>")
       }
     }
-
+    document.head.append(ErrorStyleElement)
   }
 
 }
 
-object PageHighlightReporter {
+object PageErrorHighlighter {
 
-  val HighlightCssRule =
-    "padding: 1px 3px 1px 3px; " +
-    "background-color: #FFEE08 !important; " +
-    "border: solid 1px #FF1100 !important;"
+  val HighlightCssClass = "error-highlight-class"
 
-  // For page and source view
+  val ErrorStyleElement = """
+    <style type="text/css">
+      /* Style added by TagSharp */
+      .error-highlight-class {
+        padding: 1px 3px 1px 3px; 
+        background-color: #FFEEEE !important;
+        border: solid 1px #FF1100 !important;
+      }
+    </style>
+    """
+
   def appendTitleAttributeMessage(elements: List[Element], checkpoints: List[Checkpoint]) = {
     elements.foreach(e => {
       val ids = e.attr(ErrorAttribute)

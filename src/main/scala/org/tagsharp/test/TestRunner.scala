@@ -5,10 +5,10 @@ import org.jsoup.nodes.Element
 
 class TestRunner(val element: Element, val checkpointSuite: CheckpointSuite) {
 
-  def resultsOfTests():Results = {
+  def testResults():Results = {
     val results = {
       for (checkpoint <- checkpointSuite.checkpoints)
-      yield (checkpoint, checkpoint.test.test(element))
+      yield (checkpoint, checkpoint.test(element))
     }
     val parted = results.toList partition (r => r match {
       case (c,Pass()) => true

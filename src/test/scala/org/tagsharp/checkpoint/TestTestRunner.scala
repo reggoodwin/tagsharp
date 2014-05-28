@@ -5,8 +5,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.FlatSpec
 import org.tagsharp.test.TestRunner
-import org.tagsharp.checkpoint.Highlightable._
-import org.tagsharp.reporter.{PageSourceHighlightReporter, PageHighlightReporter}
+import org.tagsharp.reporter.PageErrorHighlighter
 import org.tagsharp.util.TestingUtil.{readFileContents, SamplePagesDirectory}
 
 
@@ -62,14 +61,14 @@ class TestTestRunner extends FlatSpec with ShouldMatchers {
   behavior of "TestRunner"
 
   it should "run tests and not find errors" in new Fixture with GoodHtml {
-    val results = runner.resultsOfTests()
+    val results = runner.testResults()
     results.passes should have size(checkpointSuite.size)
     results.failures should have size (0)
     results.total should equal (checkpointSuite.size)
   }
 
   it should "run tests and find errors" in new Fixture with BadHtml {
-    val results = runner.resultsOfTests()
+    val results = runner.testResults()
     val expectedPasses = 3 // passes underline and heading test
     results.passes should have size(expectedPasses)
     results.failures should have size (checkpointSuite.size - expectedPasses)
@@ -87,7 +86,7 @@ class TestTestRunner extends FlatSpec with ShouldMatchers {
 
     val fileName = "page_with_errors.html"
     val runner = new TestRunner(doc, checkpointSuite)
-    val results = runner.resultsOfTests()
+    val results = runner.testResults()
 
     val expectedPasses = 2 // passes underline
     results.passes should have size(expectedPasses)
@@ -97,14 +96,10 @@ class TestTestRunner extends FlatSpec with ShouldMatchers {
 
   /*
   def highlightAndFile(doc: Document, fileName: String, failures:List[(Checkpoint,Result)]) {
-    new PageHighlightReporter().create(doc, failures)
+    new PageErrorHighlighter().create(doc, failures)
     writeToFile(SamplePagesDirectory + fileName + "_highlighted.html", doc.html())
   }
-
-  def highlightSourceAndFile(doc: Document, fileName: String, failures:List[(Checkpoint,Result)]) {
-    val html = new PageSourceHighlightReporter().create(doc, failures)
-    writeToFile(SamplePagesDirectory + fileName + "_highlighted_source.html", html)
-  }
   */
+  
 
 }

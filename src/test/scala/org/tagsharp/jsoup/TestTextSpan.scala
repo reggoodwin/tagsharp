@@ -10,7 +10,7 @@ class TestTextSpan extends FlatSpec with ShouldMatchers {
 
   behavior of "TextSpan"
 
-  // Same as TestPageHighlightReporter
+  // Same as TestPageErrorHighlighter
   trait TextSpanFixture {
 
     // n0  [0   4]

@@ -4,11 +4,11 @@ import scala.collection.JavaConverters._
 import org.jsoup.Jsoup
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
-import org.tagsharp.reporter.PageHighlightReporter
-import org.tagsharp.jsoup.JSoupUtil.{appendAttribute, matchDocument, selectElements, updateStyle}
+import org.tagsharp.reporter.PageErrorHighlighter
+import org.tagsharp.jsoup.JSoupUtil.{appendAttribute, matchDocument, selectElements, appendClass}
 
 
-class TestJSoupUtil extends FlatSpec with ShouldMatchers {
+class TestJsoupUtil extends FlatSpec with ShouldMatchers {
 
   def failedToSplice = fail("Failed to splice TextNode")
 
@@ -28,12 +28,12 @@ class TestJSoupUtil extends FlatSpec with ShouldMatchers {
         |<h1 id="h1">The Main Heading</h1>
         |<h2 id="h2">Second Heading</h2>
         |<p foo-foo="baa">Follow this <a href="www.site.com">link</a> to learn more.</p>
-        |<p foo-foo="baa">Then follow this <a style="bla" href="www.site2.com">that link</a> to learn more.</p>
+        |<p foo-foo="baa">Then follow this <a style="bla" class="clazz" href="www.site2.com">that link</a> to learn more.</p>
         |</body>
         |</html>
       """.stripMargin
 
-    val styleToFind = PageHighlightReporter.HighlightCssRule
+    val classToFind = PageErrorHighlighter.HighlightCssClass
     val doc = Jsoup.parse(html)
     val h1 = doc.getElementById("h1")
     val h2 = doc.getElementById("h2")
@@ -82,18 +82,19 @@ class TestJSoupUtil extends FlatSpec with ShouldMatchers {
   }
 
 
-  behavior of "JSoupUtil updateStyle"
+  behavior of "JSoupUtil appendClass"
 
-  it should "updateStyle style matches" in new Fixture {
+  it should "appendClass class matches" in new Fixture {
 
     val elements = doc.select("a")
     elements should have size (2)
     val elmsList = elements.asScala.toList
-    elmsList foreach (updateStyle(_, styleToFind))
+    elmsList foreach (appendClass(_, classToFind))
     val newHtml = doc.html()
 
-    newHtml.split(styleToFind) should have length (3)
-    newHtml.contains("bla; " + styleToFind) should equal (true) // one <a> contains style merges
+    newHtml.split(classToFind) should have length (3)
+    // one <a> contains a class attribute
+    newHtml.contains("clazz " + classToFind) should equal (true)
   }
 
 }

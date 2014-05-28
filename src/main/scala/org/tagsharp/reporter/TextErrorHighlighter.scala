@@ -4,9 +4,9 @@ import org.tagsharp.checkpoint.Checkpoint
 import org.tagsharp.test.{Pass, Fail, Results, Result}
 
 
-class TextErrorReporter {
+class TextErrorHighlighter {
 
-  def createReport(results: Results):String = {
+  def highlight(results: Results):String = {
     return collect(results.failures ::: results.passes)
   }
 
